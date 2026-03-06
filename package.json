@@ -1,0 +1,54 @@
+{
+  "name": "cli-vs-mcp-evals",
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/suite.d.ts",
+      "default": "./dist/suite.js"
+    },
+    "./agent": {
+      "types": "./dist/agent/index.d.ts",
+      "default": "./dist/agent/index.js"
+    },
+    "./eval": {
+      "types": "./dist/eval.d.ts",
+      "default": "./dist/eval.js"
+    },
+    "./scorers/*": {
+      "types": "./dist/scorers/*.d.ts",
+      "default": "./dist/scorers/*.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepare": "tsc",
+    "generate:suites": "npx tsx scripts/generate-suite-index.ts",
+    "eval": "npm run generate:suites && npx braintrust eval src/evals/e2e.eval.ts",
+    "eval:all": "npm run generate:suites && npx braintrust eval src/evals/run-all.ts",
+    "eval:github": "EVAL_SUITE=github npm run eval",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.2.34",
+    "@anthropic-ai/sdk": "^0.74.0",
+    "autoevals": "^0.0.132",
+    "braintrust": "^2.2.2",
+    "dotenv": "^16.4.5",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "prettier": "^3.8.1",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vitest": "^4.0.18"
+  }
+}
