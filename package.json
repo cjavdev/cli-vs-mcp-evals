@@ -32,6 +32,7 @@
     "eval:github": "EVAL_SUITE=github npm run eval",
     "eval:stainless": "EVAL_SUITE=stainless npm run eval",
     "eval:stripe": "EVAL_SUITE=stripe npm run eval",
+    "eval:believe": "EVAL_SUITE=believe npm run eval",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "tsc --noEmit",
