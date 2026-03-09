@@ -108,81 +108,81 @@ const suite: SuiteConfig = {
       },
       tags: ["read", "github"],
     },
-  //   {
-  //     id: "gh-issue-comments",
-  //     prompt:
-  //       "Get all comments on issue #1 in the cli/cli repo. Return the comment author and body for each.",
-  //     expected: {
-  //       description:
-  //         "Returns comments from issue #1 in cli/cli with authors and comment text.",
-  //       containsText: ["Vadim0695"],
-  //     },
-  //     tags: ["read", "github"],
-  //   },
-  //   {
-  //     id: "gh-file-deleted-pr",
-  //     prompt:
-  //       "Find the PR in kubernetes/kubernetes that deleted test/integration/scheduler_perf/create.go",
-  //     expected: {
-  //       description:
-  //         "Returns information about the PR in kubernetes/kubernetes that deleted test/integration/scheduler_perf/create.go including the PR number which is 136980.",
-  //       containsText: ["136980"],
-  //     },
-  //     tags: ["read", "github"],
-  //   },
-  //   {
-  //     id: "gh-find-org-member",
-  //     prompt:
-  //       "Find the member of the microsoft org who's bio says they build Linux Apps for @elementary OS",
-  //     expected: {
-  //       description:
-  //         "Returns information about Felipe Escoto who's github handle is Philip-Scott, the member of the microsoft org, who's bio says 'Senior Software Engineer @microsoft - Linux App Developer for @elementary OS'.",
-  //       containsText: ["Philip-Scott"],
-  //     },
-  //     tags: ["read", "github"],
-  //   },
-  //   {
-  //     id: "gh-readme",
-  //     prompt:
-  //       "Fetch the README.md from the anthropics/anthropic-cookbook repo and summarize its contents.",
-  //     expected: {
-  //       description:
-  //         `Returns a summary from the anthropics/anthropic-cookbook README mentioning 'anthropic'. Example summary:   Purpose: A collection of code snippets and guides to help developers build with Claude, primarily in Python.                                                                                                                                                                                                          
+    {
+      id: "gh-issue-comments",
+      prompt:
+        "Get all comments on issue #1 in the cli/cli repo. Return the comment author and body for each.",
+      expected: {
+        description:
+          "Returns comments from issue #1 in cli/cli with authors and comment text.",
+        containsText: ["Vadim0695"],
+      },
+      tags: ["read", "github"],
+    },
+    {
+      id: "gh-file-deleted-pr",
+      prompt:
+        "Find the PR in kubernetes/kubernetes that deleted test/integration/scheduler_perf/create.go",
+      expected: {
+        description:
+          "Returns information about the PR in kubernetes/kubernetes that deleted test/integration/scheduler_perf/create.go including the PR number which is 136980.",
+        containsText: ["136980"],
+      },
+      tags: ["read", "github"],
+    },
+    {
+      id: "gh-find-org-member",
+      prompt:
+        "Find the member of the microsoft org who's bio says they build Linux Apps for @elementary OS",
+      expected: {
+        description:
+          "Returns information about Felipe Escoto who's github handle is Philip-Scott, the member of the microsoft org, who's bio says 'Senior Software Engineer @microsoft - Linux App Developer for @elementary OS'.",
+        containsText: ["Philip-Scott"],
+      },
+      tags: ["read", "github"],
+    },
+    {
+      id: "gh-readme",
+      prompt:
+        "Fetch the README.md from the anthropics/anthropic-cookbook repo and summarize its contents.",
+      expected: {
+        description:
+          `Returns a summary from the anthropics/anthropic-cookbook README mentioning 'anthropic'. Example summary:   Purpose: A collection of code snippets and guides to help developers build with Claude, primarily in Python.                                                                                                                                                                                                          
                                                                                                                                                                                                                                                                                                                         
-  // Prerequisites: A Claude API key (free signup). Recommends the https://github.com/anthropics/courses/tree/master/anthropic_api_fundamentals for beginners.                                                                                                                                                             
+  Prerequisites: A Claude API key (free signup). Recommends the https://github.com/anthropics/courses/tree/master/anthropic_api_fundamentals for beginners.                                                                                                                                                             
                                                                                                                                                                                                                                                                                                                         
-  // Recipe categories:                                                                                                                                                                                                                                                                                                    
+  Recipe categories:                                                                                                                                                                                                                                                                                                    
                                                                                                                                                                                                                                                                                                                         
-  // ┌──────────────────────────┬────────────────────────────────────────────────────────────────────────────────────────┐                                                                                                                                                                                                 
-  // │         Category         │                                         Topics                                         │
-  // ├──────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┤
-  // │ Capabilities             │ Classification, RAG, Summarization                                                     │
-  // ├──────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┤
-  // │ Tool Use                 │ Customer service agent, calculator integration, SQL queries                            │
-  // ├──────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┤
-  // │ Third-Party Integrations │ Pinecone, Wikipedia, web pages, Voyage AI embeddings                                   │
-  // ├──────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┤
-  // │ Multimodal               │ Vision (images, charts, forms), image generation with Stable Diffusion                 │
-  // ├──────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┤
-  // │ Advanced Techniques      │ Sub-agents, PDF upload, automated evals, JSON mode, moderation filters, prompt caching │
-  // └──────────────────────────┴────────────────────────────────────────────────────────────────────────────────────────┘
+  ┌──────────────────────────┬────────────────────────────────────────────────────────────────────────────────────────┐                                                                                                                                                                                                 
+  │         Category         │                                         Topics                                         │
+  ├──────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┤
+  │ Capabilities             │ Classification, RAG, Summarization                                                     │
+  ├──────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┤
+  │ Tool Use                 │ Customer service agent, calculator integration, SQL queries                            │
+  ├──────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┤
+  │ Third-Party Integrations │ Pinecone, Wikipedia, web pages, Voyage AI embeddings                                   │
+  ├──────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┤
+  │ Multimodal               │ Vision (images, charts, forms), image generation with Stable Diffusion                 │
+  ├──────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┤
+  │ Advanced Techniques      │ Sub-agents, PDF upload, automated evals, JSON mode, moderation filters, prompt caching │
+  └──────────────────────────┴────────────────────────────────────────────────────────────────────────────────────────┘
 
-  // Community: Open to contributions via issues and PRs. Links to Anthropic docs, support, and Discord for further resources. Also references https://github.com/aws-samples/anthropic-on-aws for AWS-specific examples.`,
-  //       containsText: ["Claude"],
-  //     },
-  //     tags: ["read", "github"],
-  //   },
-  //   {
-  //     id: "gh-list-branches",
-  //     prompt:
-  //       "List all branches in the cli/cli repo.",
-  //     expected: {
-  //       description:
-  //         "Returns a list of branches from cli/cli including the 'trunk' branch.",
-  //       containsText: ["trunk", "3521-use-current-branch-as-ref-for-gh-workflow-run"],
-  //     },
-  //     tags: ["read", "github"],
-  //   },
+  Community: Open to contributions via issues and PRs. Links to Anthropic docs, support, and Discord for further resources. Also references https://github.com/aws-samples/anthropic-on-aws for AWS-specific examples.`,
+        containsText: ["Claude"],
+      },
+      tags: ["read", "github"],
+    },
+    {
+      id: "gh-list-branches",
+      prompt:
+        "List all branches in the cli/cli repo.",
+      expected: {
+        description:
+          "Returns a list of branches from cli/cli including the 'trunk' branch.",
+        containsText: ["trunk", "3521-use-current-branch-as-ref-for-gh-workflow-run"],
+      },
+      tags: ["read", "github"],
+    },
   ],
 };
 
