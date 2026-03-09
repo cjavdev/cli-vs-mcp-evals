@@ -37,9 +37,31 @@ export const MCPApproachSchema = BaseApproachSchema.extend({
   headers: z.record(z.string(), z.string()).optional(),
 });
 
+const MCPServerConfigSchema = z.object({
+  transport: z.enum(["stdio", "sse"]).default("stdio"),
+  command: z.string().optional(),
+  args: z.array(z.string()).optional(),
+  env: z.record(z.string(), z.string()).optional(),
+  url: z.string().optional(),
+  headers: z.record(z.string(), z.string()).optional(),
+});
+
+export const BothApproachSchema = BaseApproachSchema.extend({
+  type: z.literal("both"),
+  id: z.string(),
+  // CLI fields
+  command: z.string(),
+  description: z.string(),
+  installCheck: z.string(),
+  authEnvVars: z.array(z.string()),
+  // MCP server config (nested to avoid field collisions with CLI `command`)
+  mcpServer: MCPServerConfigSchema,
+});
+
 export const ApproachSchema = z.discriminatedUnion("type", [
   CLIApproachSchema,
   MCPApproachSchema,
+  BothApproachSchema,
 ]);
 
 export const ExpectedResultSchema = z.object({
@@ -92,7 +114,29 @@ export interface MCPApproach {
   tags?: string[];
 }
 
-export type Approach = CLIApproach | MCPApproach;
+export interface MCPServerConfig {
+  transport: "stdio" | "sse";
+  command?: string;
+  args?: string[];
+  env?: Record<string, string>;
+  url?: string;
+  headers?: Record<string, string>;
+}
+
+export interface BothApproach {
+  type: "both";
+  id: string;
+  displayName: string;
+  command: string;
+  description: string;
+  installCheck: string;
+  authEnvVars: string[];
+  mcpServer: MCPServerConfig;
+  models?: ModelAlias[];
+  tags?: string[];
+}
+
+export type Approach = CLIApproach | MCPApproach | BothApproach;
 export type ExpectedResult = z.infer<typeof ExpectedResultSchema>;
 export type TestCase = z.infer<typeof TestCaseSchema>;
 

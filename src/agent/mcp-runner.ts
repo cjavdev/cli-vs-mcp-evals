@@ -26,7 +26,13 @@ const DEFAULT_MODEL: ModelConfig = {
 const DEFAULT_MAX_TURNS = 30;
 const DEFAULT_SYSTEM_PROMPT =
   "You are a helpful assistant with access to API tools via MCP. " +
-  "Use the available tools to answer questions accurately based on actual data.";
+  "IMPORTANT: MCP tools are deferred and must be discovered before use. " +
+  "Before answering, use the ToolSearch tool to find available MCP tools " +
+  "(e.g., search with a keyword like 'github' or 'mcp'). " +
+  "Once discovered, use those MCP tools to answer questions accurately based on actual data. " +
+  "CRITICAL: You must ONLY use MCP tools (prefixed with mcp__) and ToolSearch. " +
+  "Do NOT use the Bash tool, CLI commands, or any non-MCP tools. " +
+  "If MCP tools fail or are unavailable, report the failure instead of falling back to other tools.";
 
 export class MCPRunner implements AgentRunner {
   async run(
@@ -95,17 +101,8 @@ export class MCPRunner implements AgentRunner {
       mcpServers: {
         [approach.id]: mcpServerConfig,
       },
-      allowedTools: ["mcp__*", "Read", "Grep"],
-      disallowedTools: [
-        "Write",
-        "Edit",
-        "NotebookEdit",
-        "WebFetch",
-        "WebSearch",
-        "Task",
-        "TodoRead",
-        "TodoWrite",
-      ],
+      allowedTools: ["ToolSearch", "mcp__*"],
+      disallowedTools: ["Bash", "Read", "Grep", "Glob", "Edit", "Write", "NotebookEdit", "WebFetch", "WebSearch", "Agent"],
     };
 
     if (modelConfig.betas?.length) {

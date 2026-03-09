@@ -102,6 +102,40 @@ export function runEvals(suite: SuiteConfig, options?: RunEvalsOptions): void {
             throw err;
           }
 
+          // Detect tool isolation violations
+          const toolNames = result.toolCalls.map((tc) => tc.name);
+          const violations: string[] = [];
+          if (approach.type === "mcp") {
+            const bashCalls = toolNames.filter((n) => n === "Bash");
+            if (bashCalls.length > 0) {
+              violations.push(`MCP approach used Bash tool ${bashCalls.length} time(s)`);
+            }
+            const nonMcpCalls = toolNames.filter(
+              (n) => n !== "ToolSearch" && !n.startsWith("mcp__"),
+            );
+            if (nonMcpCalls.length > 0) {
+              violations.push(`MCP approach used non-MCP tools: ${[...new Set(nonMcpCalls)].join(", ")}`);
+            }
+          } else if (approach.type === "cli") {
+            const mcpCalls = toolNames.filter(
+              (n) => n === "ToolSearch" || n.startsWith("mcp__"),
+            );
+            if (mcpCalls.length > 0) {
+              violations.push(`CLI approach used MCP tools: ${[...new Set(mcpCalls)].join(", ")}`);
+            }
+            const nonBashCalls = toolNames.filter((n) => n !== "Bash");
+            if (nonBashCalls.length > 0) {
+              violations.push(`CLI approach used non-Bash tools: ${[...new Set(nonBashCalls)].join(", ")}`);
+            }
+          } else if (approach.type === "both") {
+            const disallowedCalls = toolNames.filter(
+              (n) => n !== "Bash" && n !== "ToolSearch" && !n.startsWith("mcp__"),
+            );
+            if (disallowedCalls.length > 0) {
+              violations.push(`Both approach used disallowed tools: ${[...new Set(disallowedCalls)].join(", ")}`);
+            }
+          }
+
           // Log raw metrics to Braintrust
           currentSpan().log({
             metrics: {
@@ -118,6 +152,8 @@ export function runEvals(suite: SuiteConfig, options?: RunEvalsOptions): void {
               modelId: result.model,
               provider: modelConfig.provider,
               approachType: approach.type,
+              toolViolations: violations,
+              toolViolationCount: violations.length,
             },
           });
 
@@ -127,6 +163,7 @@ export function runEvals(suite: SuiteConfig, options?: RunEvalsOptions): void {
             toolCalls: result.toolCalls,
             turnCount: result.turnCount,
             totalTokens: result.inputTokens + result.outputTokens,
+            approachType: approach.type,
           });
         },
         scores: [
@@ -179,6 +216,36 @@ export function runEvals(suite: SuiteConfig, options?: RunEvalsOptions): void {
               name: "Efficiency",
               score: scoreEfficiency({ turnCount, totalTokens }),
             };
+          },
+          // Tool isolation scorer: 1.0 if only permitted tools were used, 0 otherwise
+          (args: { input: any; output: string; expected?: string }) => {
+            let toolCalls: { name: string }[] = [];
+            let approachType = "";
+            try {
+              const parsed = JSON.parse(args.output);
+              toolCalls = parsed.toolCalls ?? [];
+              approachType = parsed.approachType ?? "";
+            } catch {
+              return { name: "ToolIsolation", score: 1 };
+            }
+            const toolNames = toolCalls.map((tc) => tc.name);
+            if (approachType === "mcp") {
+              const hasViolation = toolNames.some(
+                (n) => n !== "ToolSearch" && !n.startsWith("mcp__"),
+              );
+              return { name: "ToolIsolation", score: hasViolation ? 0 : 1 };
+            }
+            if (approachType === "cli") {
+              const hasViolation = toolNames.some((n) => n !== "Bash");
+              return { name: "ToolIsolation", score: hasViolation ? 0 : 1 };
+            }
+            if (approachType === "both") {
+              const hasViolation = toolNames.some(
+                (n) => n !== "Bash" && n !== "ToolSearch" && !n.startsWith("mcp__"),
+              );
+              return { name: "ToolIsolation", score: hasViolation ? 0 : 1 };
+            }
+            return { name: "ToolIsolation", score: 1 };
           },
         ],
       });
