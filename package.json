@@ -30,6 +30,8 @@
     "eval": "npm run generate:suites && npx braintrust eval src/evals/e2e.eval.ts",
     "eval:all": "npm run generate:suites && npx braintrust eval src/evals/run-all.ts",
     "eval:github": "EVAL_SUITE=github npm run eval",
+    "eval:stainless": "EVAL_SUITE=stainless npm run eval",
+    "eval:stripe": "EVAL_SUITE=stripe npm run eval",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "tsc --noEmit",
