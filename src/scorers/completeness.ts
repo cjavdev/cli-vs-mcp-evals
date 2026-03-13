@@ -1,5 +1,15 @@
 import type { ExpectedResult } from "../suite.js";
 
+const CURRENCY_AND_COMMAS = /[$£€,]/g;
+
+function isNumericString(s: string): boolean {
+  return /^\d+(\.\d+)?$/.test(s.trim());
+}
+
+function normalizeNumeric(s: string): string {
+  return s.replace(CURRENCY_AND_COMMAS, "");
+}
+
 /**
  * Heuristic scorer: checks whether the output contains expected text strings
  * and JSON fields. Returns a score between 0 and 1.
@@ -9,20 +19,26 @@ export function scoreCompleteness(
   expected: ExpectedResult,
 ): number {
   const checks: boolean[] = [];
+  const lower = output.toLowerCase();
 
   // Check containsText
   if (expected.containsText && expected.containsText.length > 0) {
-    const lower = output.toLowerCase();
     for (const text of expected.containsText) {
-      checks.push(lower.includes(text.toLowerCase()));
+      if (isNumericString(text)) {
+        // Numeric-aware matching: strip currency symbols and commas
+        const normalizedOutput = normalizeNumeric(lower);
+        checks.push(normalizedOutput.includes(text.trim()));
+      } else {
+        checks.push(lower.includes(text.toLowerCase()));
+      }
     }
   }
 
   // Check fieldValues
   if (expected.fieldValues) {
     for (const [_key, value] of Object.entries(expected.fieldValues)) {
-      const stringValue = String(value);
-      checks.push(output.includes(stringValue));
+      const stringValue = String(value).toLowerCase();
+      checks.push(lower.includes(stringValue));
     }
   }
 

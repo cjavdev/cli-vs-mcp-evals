@@ -42,16 +42,18 @@
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.2.34",
     "@anthropic-ai/sdk": "^0.74.0",
+    "@cjavdev/believe": "^0.17.1",
     "autoevals": "^0.0.132",
     "braintrust": "^2.2.2",
     "dotenv": "^16.4.5",
+    "ts-node": "^10.9.2",
     "zod": "^4.0.0"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
+    "@types/node": "^22.19.15",
     "prettier": "^3.8.1",
     "tsx": "^4.19.0",
-    "typescript": "^5.7.0",
+    "typescript": "^5.9.3",
     "vitest": "^4.0.18"
   }
 }
